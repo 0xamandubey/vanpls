@@ -1,0 +1,1109 @@
+/* ==========================================================================
+   LOVE LETTER JOURNEY — STYLESHEET
+   Style Focus: Elegant CSS drawings, 3D interactive envelopes, vector styling
+   ========================================================================== */
+
+/* Design System Variables */
+:root {
+    --bg-start: #FFF8F8;
+    --bg-end: #FFE8EE;
+    
+    /* Harmonious Romance Palette */
+    --accent-primary: #FF4D6D;
+    --accent-primary-hover: #E03E5D;
+    --accent-soft: #FF7AA2;
+    --accent-secondary: #7EC8FF;
+    --accent-secondary-dark: #5CAEE6;
+    
+    --text-main: #2D2D2D;
+    --text-muted: #665C5F;
+    --white-opaque: rgba(255, 255, 255, 0.9);
+    --glass-bg: rgba(255, 250, 250, 0.7);
+    --glass-border: rgba(255, 77, 109, 0.15);
+    
+    --font-heading: 'Outfit', sans-serif;
+    --font-serif: 'Playfair Display', serif;
+    
+    --shadow-soft: 0 10px 30px rgba(255, 77, 109, 0.08);
+    --shadow-glow: 0 0 25px rgba(255, 77, 109, 0.35);
+    --shadow-blue-glow: 0 0 25px rgba(126, 200, 255, 0.4);
+    
+    --transition-slow: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-mid: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --transition-fast: 0.2s ease;
+}
+
+/* Reset & Base Rules */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Strict scroll lock to prevent layout shifting on mobile */
+    font-family: var(--font-heading);
+    color: var(--text-main);
+    background-color: var(--bg-start);
+}
+
+body {
+    background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Base App Layout Container */
+.app-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 480px; /* Perfectly structured for mobile screens */
+    margin: 0 auto;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(255, 77, 109, 0.05);
+}
+
+/* Global Floating Decorative Elements */
+.floating-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.floating-item {
+    position: absolute;
+    font-size: 24px;
+    opacity: 0.6;
+    user-select: none;
+    animation: drift 12s infinite linear;
+}
+
+/* Particle Canvas Overlays */
+#effect-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   SCENE LAYOUTS & TRANSITIONS
+   ========================================================================== */
+.scene {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px);
+    transition: opacity var(--transition-slow), transform var(--transition-slow);
+    z-index: 2;
+    padding: 20px;
+}
+
+.scene.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+    z-index: 10;
+}
+
+.scene.exit {
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none;
+}
+
+.scene-content {
+    width: 100%;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 5;
+}
+
+/* Titles and Typography */
+.scene-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--accent-primary);
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 10px rgba(255, 77, 109, 0.05);
+}
+
+.scene-title.light-text {
+    color: #FFF;
+    text-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+}
+
+.scene-subtitle {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    line-height: 1.5;
+    padding: 0 15px;
+}
+
+.scene-subtitle.light-text {
+    color: #FFE6EC;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+/* ==========================================================================
+   UI COMPONENTS (BUTTONS & BADGES)
+   ========================================================================== */
+.btn {
+    border: none;
+    outline: none;
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: var(--shadow-soft);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+    font-family: var(--font-heading);
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+.btn-primary {
+    background-color: var(--accent-primary);
+    color: #FFF;
+}
+
+.btn-primary:hover, .btn-primary:active {
+    background-color: var(--accent-primary-hover);
+    box-shadow: 0 12px 35px rgba(255, 77, 109, 0.25);
+}
+
+.btn-accent {
+    background-color: #FFF;
+    color: var(--accent-primary);
+    border: 2px solid var(--accent-primary);
+}
+
+.btn-accent:hover, .btn-accent:active {
+    background-color: var(--accent-primary);
+    color: #FFF;
+}
+
+/* Custom Animation helpers */
+.pulse {
+    animation: buttonPulse 2s infinite ease-in-out;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.unlock-container {
+    margin-top: 30px;
+    animation: fadeIn 0.8s ease forwards;
+}
+
+/* ==========================================================================
+   SCENE 1: LANDING LAYOUT
+   ========================================================================== */
+.large-floating-heart {
+    font-size: 100px;
+    filter: drop-shadow(0 15px 20px rgba(255, 77, 109, 0.15));
+    animation: floatHeart 4s infinite ease-in-out;
+    margin-bottom: 20px;
+    user-select: none;
+}
+
+.landing-title {
+    font-family: var(--font-serif);
+    font-size: 54px;
+    font-weight: 600;
+    color: var(--accent-primary);
+    margin-bottom: 12px;
+}
+
+.landing-subtitle {
+    font-size: 18px;
+    color: var(--text-muted);
+    margin-bottom: 35px;
+}
+
+/* ==========================================================================
+   SCENE 2: INTERACTIVE CSS ENVELOPES
+   ========================================================================== */
+.envelopes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 350px;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.envelope-item:nth-child(5) {
+    grid-column: span 2;
+    justify-self: center;
+    width: calc(50% - 10px);
+}
+
+.envelope-wrapper {
+    perspective: 800px;
+    width: 100%;
+    aspect-ratio: 1.35 / 1;
+}
+
+.envelope-card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #FFF;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(255, 77, 109, 0.08);
+    cursor: pointer;
+    transition: transform var(--transition-mid), box-shadow var(--transition-mid);
+    transform-style: preserve-3d;
+}
+
+.envelope-card:hover, .envelope-card:active {
+    transform: translateY(-8px) rotateX(10deg);
+    box-shadow: 0 15px 35px rgba(255, 77, 109, 0.15);
+}
+
+/* 3D Envelope Flap */
+.envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    border-left: 70px solid transparent;
+    border-right: 70px solid transparent;
+    border-top: 50px solid var(--accent-soft);
+    border-bottom: 0 solid transparent;
+    transform-origin: top center;
+    transition: transform 0.5s ease-out, z-index 0.2s ease-out;
+    z-index: 10;
+}
+
+/* Mobile responsive flaps */
+@media (max-width: 400px) {
+    .envelope-flap {
+        border-left-width: 65px;
+        border-right-width: 65px;
+        border-top-width: 45px;
+    }
+}
+
+/* Envelope Back Side pocket background shadow */
+.envelope-front {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+    background: linear-gradient(135deg, #FF9ebb 0%, #FF7AA2 100%);
+    border-radius: 0 0 12px 12px;
+    clip-path: polygon(0 0, 48% 60%, 52% 60%, 100% 0, 100% 100%, 0 100%);
+    z-index: 5;
+}
+
+/* Letter inside */
+.envelope-paper {
+    position: absolute;
+    bottom: 8%;
+    left: 10%;
+    width: 80%;
+    height: 70%;
+    background-color: #FFF2F4;
+    border: 1px dashed var(--accent-soft);
+    border-radius: 8px;
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.envelope-paper-heart {
+    font-size: 20px;
+    animation: floatHeart 2s infinite ease-in-out;
+}
+
+.envelope-seal {
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    font-size: 24px;
+    z-index: 12;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Open states animated completely through CSS transitions! */
+.opened .envelope-flap {
+    transform: rotateX(180deg);
+    z-index: 2;
+    border-top-color: #FFB3C6;
+}
+
+.opened .envelope-paper {
+    transform: translateY(-40px) scale(1.05);
+    z-index: 8;
+}
+
+.opened .envelope-seal {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+}
+
+/* Reading Card Modal Style (Modern Vector Elegant style) */
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(45, 45, 45, 0.3);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    z-index: 1000;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    width: 85%;
+    max-width: 360px;
+    position: relative;
+    transform: scale(0.85);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1);
+}
+
+.modal-close {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    font-size: 32px;
+    color: var(--accent-primary);
+    cursor: pointer;
+    z-index: 15;
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
+}
+
+.modal-body-card {
+    background-color: #FFF;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(255, 77, 109, 0.12);
+    padding: 40px 30px;
+    min-height: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Elegant Vector Border frame inside letter cards */
+.letter-border-frame {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: calc(100% - 30px);
+    height: calc(100% - 30px);
+    border: 1.5px solid rgba(255, 77, 109, 0.15);
+    border-radius: 16px;
+    pointer-events: none;
+}
+
+.letter-border-frame::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
+    border: 1px solid rgba(255, 77, 109, 0.06);
+    border-radius: 12px;
+}
+
+.letter-text-content {
+    position: relative;
+    font-family: var(--font-serif);
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--text-main);
+    text-align: center;
+    font-style: italic;
+    animation: paperFloat 3s infinite ease-in-out;
+}
+
+/* ==========================================================================
+   SCENE 3: RAGEBAIT APOLOGY (TYPEWRITER CONSOLE & HEART LOADER)
+   ========================================================================== */
+.apology-content {
+    justify-content: flex-start;
+    padding-top: 40px;
+    height: 100%;
+}
+
+.typewriter-box {
+    width: 100%;
+    max-width: 360px;
+    height: 38vh;
+    background: var(--glass-bg);
+    border: 1.5px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 25px;
+    overflow-y: auto;
+    text-align: left;
+    box-shadow: var(--shadow-soft);
+    position: relative;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-soft) transparent;
+}
+
+/* Smooth custom scrollbars for premium feel */
+.typewriter-box::-webkit-scrollbar {
+    width: 4px;
+}
+.typewriter-box::-webkit-scrollbar-thumb {
+    background-color: var(--accent-soft);
+    border-radius: 4px;
+}
+
+.typewriter-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-main);
+    white-space: pre-wrap;
+}
+
+/* Heart Loader Container (Bottom Center) */
+.heart-loader-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.heart-loader-svg-wrapper {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    margin-bottom: 12px;
+    transition: transform var(--transition-fast), filter var(--transition-fast);
+}
+
+.heart-loader-svg-wrapper.heart-clickable-btn {
+    cursor: pointer;
+    animation: floatHeart 2.5s infinite ease-in-out;
+    filter: drop-shadow(0 0 15px var(--accent-soft));
+}
+
+.heart-loader-svg-wrapper.heart-clickable-btn:active {
+    transform: scale(0.92);
+}
+
+.heart-svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 4px 10px rgba(255, 77, 109, 0.15));
+}
+
+#heart-liquid {
+    transition: y 0.15s ease-out;
+}
+
+.glow-sparkles {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    border-radius: 50%;
+    box-shadow: var(--shadow-glow);
+    animation: pulseGlow 1.5s infinite alternate;
+}
+
+.heart-loader-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent-soft);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    height: 18px;
+    margin-bottom: 10px;
+}
+
+/* ==========================================================================
+   SCENE 4: MINIATURE COUPLE (VECTOR STYLED SLOPES GARDEN)
+   ========================================================================== */
+.garden-background-container {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, #FFEBEF 0%, #FFF5F7 60%, #E3F2FD 100%);
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(255, 77, 109, 0.1);
+}
+
+/* Vector Slopes */
+.garden-hill-back {
+    position: absolute;
+    bottom: -10px;
+    left: -20%;
+    width: 140%;
+    height: 180px;
+    background: #E8F5E9;
+    border-radius: 60% 60% 0 0;
+    opacity: 0.6;
+}
+
+.garden-hill-front {
+    position: absolute;
+    bottom: -15px;
+    left: -10%;
+    width: 120%;
+    height: 120px;
+    background: #C8E6C9;
+    border-radius: 50% 50% 0 0;
+    z-index: 2;
+    box-shadow: inset 0 8px 15px rgba(255, 255, 255, 0.2);
+}
+
+/* Little CSS/SVG Flowers growing on hills */
+.garden-flowers-container {
+    position: absolute;
+    bottom: 40px;
+    width: 100%;
+    height: 60px;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.vector-flower {
+    position: absolute;
+    font-size: 14px;
+    animation: floatHeart 2.5s infinite alternate ease-in-out;
+}
+
+.vector-flower.t1 { bottom: 10px; left: 15%; animation-delay: 0.2s; }
+.vector-flower.t2 { bottom: 35px; left: 35%; animation-delay: 0.5s; }
+.vector-flower.t3 { bottom: 15px; left: 65%; animation-delay: 0.8s; }
+.vector-flower.t4 { bottom: 25px; left: 85%; animation-delay: 0s; }
+
+.scene-overlay-dim {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(45, 45, 45, 0.05) 0%, rgba(45, 45, 45, 0.15) 100%);
+    z-index: 1;
+}
+
+.couple-stage-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 30px 20px;
+}
+
+.characters-container {
+    position: absolute;
+    bottom: 75px;
+    width: 100%;
+    height: 42vh; /* Occupies exactly 42% of the screen height! */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 20px; /* Places them right next to each other, extremely cozy! */
+    z-index: 4;
+}
+
+.character-wrapper {
+    position: relative;
+    height: 100%; /* Spans 100% height of characters-container (42vh) */
+    width: auto;
+    aspect-ratio: 1 / 1.4; /* Perfect aspect ratio locking, avoiding any stretching! */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    cursor: pointer;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* Whimsical speech bubble label directly above the sprite */
+.character-label {
+    position: absolute;
+    top: -55px; /* Placed cleanly above head bounds */
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.95);
+    border: 1.5px solid var(--accent-soft);
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--accent-primary);
+    border-radius: 30px;
+    white-space: nowrap;
+    box-shadow: 0 6px 20px rgba(255, 77, 109, 0.12);
+    z-index: 100;
+    animation: labelBounce 2s infinite ease-in-out;
+}
+
+.character-label::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px 6px 0;
+    border-style: solid;
+    border-color: var(--accent-soft) transparent transparent;
+    display: block;
+    width: 0;
+}
+
+.char-sprite {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.15));
+}
+
+#sprite-male {
+    transform: scaleX(-1);
+}
+
+#sprite-female {
+    transform: scaleX(-1);
+}
+
+.blush-action #sprite-female {
+    transform: scaleX(1);
+}
+
+/* Special Glow effect on active character to tap */
+.character-wrapper.glow-effect {
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 25px var(--accent-soft));
+    animation: characterBounce 1.2s infinite ease-in-out;
+}
+
+.character-wrapper.glow-effect-male {
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 25px var(--accent-secondary));
+    animation: characterBounce 1.2s infinite ease-in-out;
+}
+
+/* Action animations triggered by app.js */
+.punch-action {
+    animation: punchQuickLeft 0.4s ease-out forwards;
+}
+
+.punch-action #sprite-female {
+    transform: scaleX(1); /* Flips punching girl direction to face left (towards the boy) */
+}
+
+.knocked-action {
+    animation: knockBackComicalLeft 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.kneeling-action {
+    transform: translateY(10px) scale(0.95);
+    animation: floatProposal 2s infinite alternate ease-in-out;
+}
+
+.kneeling-action #sprite-male {
+    transform: scaleX(1); /* Flips kneeling boy direction to face right (towards the girl) */
+}
+
+.blush-action {
+    animation: shyBlush 2s infinite alternate ease-in-out;
+}
+
+/* SVG Pow popup */
+.comic-pow {
+    position: absolute;
+    top: -25px;
+    left: -45px;
+    width: 80px;
+    height: 80px;
+    z-index: 100;
+    transform: scale(0);
+    animation: popInComic 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.pow-svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.12));
+}
+
+/* ==========================================================================
+   SCENE 5: GROWING HEART & LOCK (100 TAPS & DRAG CONSOLIDATED)
+   ========================================================================== */
+.growing-content {
+    justify-content: flex-start;
+    padding-top: 30px;
+    height: 100%;
+}
+
+.tap-counter-badge {
+    background: var(--glass-bg);
+    border: 1.5px solid var(--glass-border);
+    color: var(--accent-primary);
+    padding: 8px 18px;
+    font-size: 16px;
+    font-weight: 800;
+    border-radius: 30px;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 15px;
+}
+
+.growing-heart-wrapper {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.growing-heart {
+    font-size: 40px; /* Base size */
+    cursor: pointer;
+    user-select: none;
+    transform: scale(1);
+    transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease;
+    filter: drop-shadow(0 10px 15px rgba(255, 77, 109, 0.15));
+}
+
+.growing-heart.fade-out {
+    opacity: 0;
+    transform: scale(0);
+    pointer-events: none;
+}
+
+.growing-heart:active {
+    transform: scale(0.9) !important;
+}
+
+/* Draggable key styling placed at the bottom center */
+.draggable-key-container {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: grab;
+    touch-action: none; /* Crucial for custom touch movement events on mobile! */
+    z-index: 100;
+    margin-top: auto;
+    margin-bottom: 25px;
+}
+
+.draggable-key-container.animate-slide-up {
+    animation: slideUpKey 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.draggable-key-container:active {
+    cursor: grabbing;
+}
+
+.key-drag-svg-wrap {
+    width: 100%;
+    height: 100%;
+    animation: floatingKeyGently 3s infinite ease-in-out;
+}
+
+.key-svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 8px 15px rgba(218, 165, 32, 0.35));
+}
+
+/* Absolute positioned Lock dropzone replacing the Heart */
+.growing-heart-wrapper .lock-dropzone {
+    position: absolute;
+    width: 170px;
+    height: 170px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    transition: transform var(--transition-mid), opacity 0.5s ease;
+    animation: popInSpring 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.lock-svg-wrap {
+    width: 100%;
+    height: 100%;
+    transition: filter var(--transition-mid);
+}
+
+.lock-svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 12px 25px rgba(255, 77, 109, 0.18));
+}
+
+.drop-target-indicator {
+    position: absolute;
+    width: 120%;
+    height: 120%;
+    border: 2px dashed var(--accent-soft);
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
+    pointer-events: none;
+    animation: rotationDrift 8s infinite linear;
+}
+
+/* Hover highlights on drag active */
+.lock-dropzone.drag-hover .drop-target-indicator {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.lock-dropzone.drag-hover .lock-svg-wrap {
+    filter: drop-shadow(0 0 25px var(--accent-soft));
+    transform: scale(1.05);
+}
+
+/* Romantic Slow Typed Dialogues */
+.dialogue-box {
+    width: 100%;
+    max-width: 350px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1.5px solid rgba(255, 77, 109, 0.1);
+    border-radius: 20px;
+    padding: 15px 20px;
+    box-shadow: var(--shadow-soft);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    animation: fadeIn 0.8s ease forwards;
+}
+/* ==========================================================================
+   SCENE 7: FINAL SCROLL PRE-SORRY LETTER (VECTOR CARD STYLES)
+   ========================================================================== */
+.final-letter-content {
+    justify-content: flex-start;
+    padding-top: 30px;
+    height: 100%;
+}
+
+.final-letter-card {
+    width: 100%;
+    max-width: 380px;
+    height: 65vh;
+    background-color: #FFF;
+    border-radius: 28px;
+    box-shadow: 0 20px 45px rgba(255, 77, 109, 0.08);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 30px;
+    border: 1.5px solid rgba(255, 77, 109, 0.05);
+}
+
+.final-letter-scrollable {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    position: relative;
+    z-index: 5;
+    padding-right: 5px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 77, 109, 0.3) transparent;
+}
+
+.final-letter-scrollable::-webkit-scrollbar {
+    width: 3px;
+}
+.final-letter-scrollable::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 77, 109, 0.3);
+    border-radius: 3px;
+}
+
+.final-letter-text {
+    font-family: var(--font-serif);
+    font-size: 17px;
+    line-height: 1.8;
+    color: var(--text-main);
+    text-align: left;
+    white-space: pre-wrap;
+    padding-bottom: 20px;
+}
+
+.replay-container {
+    margin-top: auto;
+    margin-bottom: 20px;
+    z-index: 10;
+    width: 100%;
+}
+
+/* ==========================================================================
+   KEYFRAME ANIMATIONS SYSTEM
+   ========================================================================== */
+@keyframes floatHeart {
+    0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+    50% { transform: translateY(-12px) rotate(4deg) scale(1.05); }
+}
+
+@keyframes drift {
+    0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.6; }
+    100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+}
+
+@keyframes buttonPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 10px 25px rgba(255, 77, 109, 0.15); }
+    50% { transform: scale(1.05); box-shadow: 0 15px 35px rgba(255, 77, 109, 0.3); }
+}
+
+@keyframes paperFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+@keyframes pulseGlow {
+    from { box-shadow: 0 0 10px rgba(255, 77, 109, 0.2); }
+    to { box-shadow: 0 0 25px var(--accent-soft); }
+}
+
+@keyframes characterBounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-8px) scale(1.02); }
+}
+
+@keyframes punchQuick {
+    0% { transform: translateX(0) scale(1); }
+    30% { transform: translateX(-15px) scale(1.05) rotate(-5deg); }
+    50% { transform: translateX(35px) scale(1.1) rotate(10deg); }
+    100% { transform: translateX(0) scale(1); }
+}
+
+@keyframes punchQuickLeft {
+    0% { transform: translateX(0) scale(1); }
+    30% { transform: translateX(15px) scale(1.05) rotate(5deg); }
+    50% { transform: translateX(-35px) scale(1.1) rotate(-10deg); }
+    100% { transform: translateX(0) scale(1); }
+}
+
+@keyframes knockBackComical {
+    0% { transform: translateX(0) translateY(0) rotate(0deg); }
+    15% { transform: translateX(45px) translateY(-25px) rotate(35deg) scale(0.95); }
+    40% { transform: translateX(80px) translateY(-5px) rotate(70deg) scale(0.9); }
+    55% { transform: translateX(75px) translateY(10px) rotate(90deg) scale(0.85); }
+    70% { transform: translateX(75px) translateY(10px) rotate(90deg) scale(0.85); }
+    100% { transform: translateX(0) translateY(0) rotate(0deg) scale(1); }
+}
+
+@keyframes knockBackComicalLeft {
+    0% { transform: translateX(0) translateY(0) rotate(0deg); }
+    15% { transform: translateX(-45px) translateY(-25px) rotate(-35deg) scale(0.95); }
+    40% { transform: translateX(-80px) translateY(-5px) rotate(-70deg) scale(0.9); }
+    55% { transform: translateX(-75px) translateY(10px) rotate(-90deg) scale(0.85); }
+    70% { transform: translateX(-75px) translateY(10px) rotate(-90deg) scale(0.85); }
+    100% { transform: translateX(0) translateY(0) rotate(0deg) scale(1); }
+}
+
+@keyframes floatProposal {
+    from { transform: translateY(10px) scale(0.95); }
+    to { transform: translateY(4px) scale(0.97); }
+}
+
+@keyframes shyBlush {
+    from { transform: scale(1) rotate(0deg); }
+    to { transform: scale(1.02) rotate(2deg); }
+}
+
+@keyframes popInComic {
+    from { transform: scale(0) rotate(-20deg); opacity: 0; }
+    to { transform: scale(1) rotate(5deg); opacity: 1; }
+}
+
+@keyframes rotationDrift {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes floatingKeyGently {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(-5deg); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes labelBounce {
+    0%, 100% { transform: translate(-50%, 0); }
+    50% { transform: translate(-50%, -6px); }
+}
+
+@keyframes slideUpKey {
+    0% { transform: translateY(80px) scale(0.5); opacity: 0; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes popInSpring {
+    0% { transform: scale(0) rotate(-15deg); opacity: 0; }
+    70% { transform: scale(1.1) rotate(5deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+}

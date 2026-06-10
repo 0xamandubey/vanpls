@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Love Letter Journey</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,600;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <!-- Global Decorative Floating Elements -->
+    <div class="floating-container" id="floating-container"></div>
+
+    <!-- Canvas for Transition & Sparkle Effects -->
+    <canvas id="effect-canvas"></canvas>
+
+    <div class="app-container">
+
+        <!-- ================= SCENE 1: LANDING ================= -->
+        <section id="scene-1" class="scene active">
+            <div class="scene-content landing-content">
+                <div class="heart-wrapper">
+                    <div class="large-floating-heart" id="landing-heart">❤️</div>
+                </div>
+                <h1 class="landing-title">Hey vanshikaaa❤️</h1>
+                <p class="landing-subtitle">I made something special just for you.</p>
+                <button class="btn btn-primary pulse" id="btn-open-it">Open It</button>
+            </div>
+        </section>
+
+        <!-- ================= SCENE 2: US SO FAR ================= -->
+        <section id="scene-2" class="scene">
+            <div class="scene-content">
+                <h2 class="scene-title">Us So Far</h2>
+                <p class="scene-subtitle">Open envelopes...</p>
+
+                <div class="envelopes-grid">
+                    <!-- Envelope 1 -->
+                    <div class="envelope-item" data-index="0">
+                        <div class="envelope-wrapper">
+                            <div class="envelope-card">
+                                <div class="envelope-flap"></div>
+                                <div class="envelope-paper">
+                                    <div class="envelope-paper-heart">❤️</div>
+                                </div>
+                                <div class="envelope-front"></div>
+                                <div class="envelope-seal">💖</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Envelope 2 -->
+                    <div class="envelope-item" data-index="1">
+                        <div class="envelope-wrapper">
+                            <div class="envelope-card">
+                                <div class="envelope-flap"></div>
+                                <div class="envelope-paper">
+                                    <div class="envelope-paper-heart">❤️</div>
+                                </div>
+                                <div class="envelope-front"></div>
+                                <div class="envelope-seal">💖</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Envelope 3 -->
+                    <div class="envelope-item" data-index="2">
+                        <div class="envelope-wrapper">
+                            <div class="envelope-card">
+                                <div class="envelope-flap"></div>
+                                <div class="envelope-paper">
+                                    <div class="envelope-paper-heart">❤️</div>
+                                </div>
+                                <div class="envelope-front"></div>
+                                <div class="envelope-seal">💖</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Envelope 4 -->
+                    <div class="envelope-item" data-index="3">
+                        <div class="envelope-wrapper">
+                            <div class="envelope-card">
+                                <div class="envelope-flap"></div>
+                                <div class="envelope-paper">
+                                    <div class="envelope-paper-heart">❤️</div>
+                                </div>
+                                <div class="envelope-front"></div>
+                                <div class="envelope-seal">💖</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scene 2 Overlay Modal for Reading Message -->
+                <div class="modal-overlay" id="envelope-modal">
+                    <div class="modal-content">
+                        <span class="modal-close" id="modal-close-btn">&times;</span>
+                        <div class="modal-body-card">
+                            <div class="letter-border-frame"></div>
+                            <div class="letter-text-content" id="envelope-message-text"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="unlock-container hidden" id="scene2-unlock">
+                    <button class="btn btn-accent" id="btn-goto-scene3">Also, I want to tell you something...</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SCENE 3: RAGEBAIT APOLOGY ================= -->
+        <section id="scene-3" class="scene">
+            <div class="scene-content apology-content">
+                <h2 class="scene-title">Sorry for ragebaiting.</h2>
+
+                <div class="typewriter-box" id="apology-typewriter-box">
+                    <div class="typewriter-text" id="apology-text"></div>
+                </div>
+
+                <!-- Heart Loader Centered Bottom -->
+                <div class="heart-loader-container">
+                    <div class="heart-loader-svg-wrapper" id="heart-loader-wrapper">
+                        <!-- Custom SVG Outline Heart that fills with liquid -->
+                        <svg viewBox="0 0 100 100" class="heart-svg">
+                            <defs>
+                                <clipPath id="heart-clip">
+                                    <path
+                                        d="M50,90 C50,90 90,60 90,35 C90,15 70,5 50,25 C30,5 10,15 10,35 C10,60 50,90 50,90 Z" />
+                                </clipPath>
+                            </defs>
+                            <!-- Background stroke (outlined heart) -->
+                            <path d="M50,90 C50,90 90,60 90,35 C90,15 70,5 50,25 C30,5 10,15 10,35 C10,60 50,90 50,90 Z"
+                                fill="none" stroke="#FF4D6D" stroke-width="4" stroke-linecap="round" />
+                            <!-- Filling Liquid using clip path -->
+                            <g clip-path="url(#heart-clip)">
+                                <rect id="heart-liquid" x="0" y="100" width="100" height="100" fill="#FF4D6D" />
+                            </g>
+                        </svg>
+                        <div class="glow-sparkles hidden" id="heart-loader-sparkles"></div>
+                    </div>
+                    <div class="heart-loader-label" id="heart-loader-label">Tuning heart frequencies...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SCENE 4: MINIATURE COUPLE ================= -->
+        <section id="scene-4" class="scene">
+            <!-- Stylized CSS Garden Hills with floating SVGs -->
+            <div class="garden-background-container">
+                <div class="scene-overlay-dim"></div>
+
+                <!-- Stylized CSS Slopes -->
+                <div class="garden-hill-back"></div>
+                <div class="garden-hill-front"></div>
+                <div class="garden-flowers-container">
+                    <!-- Little vector CSS tulips / lilies popping out -->
+                    <div class="vector-flower t1">🌷</div>
+                    <div class="vector-flower t2">💮</div>
+                    <div class="vector-flower t3">🌷</div>
+                    <div class="vector-flower t4">💮</div>
+                </div>
+
+                <div class="couple-stage-content">
+                    <h2 class="scene-title light-text">us.....</h2>
+                    <p class="scene-subtitle light-text" id="couple-instruction">✨</p>
+
+                    <div class="characters-container">
+                        <!-- Male Character (Left) -->
+                        <div class="character-wrapper male-character" id="char-male-wrap">
+                            <div class="character-label hidden" id="label-male">Touch Me 🌷</div>
+                            <img src="assets/male_idle.png" alt="Chibi Boy" class="char-sprite" id="sprite-male">
+                        </div>
+
+                        <!-- Female Character (Right) -->
+                        <div class="character-wrapper female-character glow-effect" id="char-female-wrap">
+                            <div class="character-label" id="label-female">Touch Me ✨</div>
+                            <img src="assets/female_idle.png" alt="Chibi Girl" class="char-sprite" id="sprite-female">
+                            <!-- Comic POW popup SVG overlay positioned on left -->
+                            <div class="comic-pow hidden" id="pow-effect">
+                                <svg viewBox="0 0 100 100" class="pow-svg">
+                                    <path
+                                        d="M50,10 L58,32 L80,20 L70,42 L95,50 L70,58 L80,80 L58,68 L50,90 L42,68 L20,80 L30,58 L5,50 L30,42 L20,20 L42,32 Z"
+                                        fill="#7EC8FF" stroke="#FFF" stroke-width="3" />
+                                    <path
+                                        d="M50,20 L55,37 L72,28 L64,44 L83,50 L64,56 L72,72 L55,63 L50,80 L45,63 L28,72 L36,56 L17,50 L36,44 L28,28 L45,37 Z"
+                                        fill="#FF7AA2" stroke="#FFF" stroke-width="2" />
+                                    <text x="50" y="58" font-family="'Outfit', sans-serif" font-weight="900"
+                                        font-size="22" fill="#FFF" text-anchor="middle" stroke="#FF4D6D"
+                                        stroke-width="1">POW!</text>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="unlock-container hidden" id="scene4-unlock">
+                        <button class="btn btn-primary" id="btn-goto-scene5">Show Some Love ❤️</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SCENE 5: GROWING HEART & LOCK ================= -->
+        <section id="scene-5" class="scene">
+            <div class="scene-content growing-content">
+                <h2 class="scene-title">Growing Heart</h2>
+                <p class="scene-subtitle" id="tap-instruction-text">Keep tapping ❤️</p>
+                <div class="tap-counter-badge" id="tap-counter">0 / 100</div>
+
+                <div class="growing-heart-wrapper">
+                    <!-- The Tappable Heart -->
+                    <div class="growing-heart" id="interactive-grow-heart">❤️</div>
+
+                    <!-- Heart Lock SVG target (hidden initially) -->
+                    <div class="lock-dropzone hidden" id="lock-dropzone">
+                        <div class="lock-svg-wrap" id="heart-lock-wrap">
+                            <svg viewBox="0 0 100 100" class="lock-svg">
+                                <path d="M30,40 V25 C30,12 70,12 70,25 V40" fill="none" stroke="#FFD700"
+                                    stroke-width="8" stroke-linecap="round" />
+                                <path
+                                    d="M50,90 C50,90 90,60 90,35 C90,15 70,5 50,25 C30,5 10,15 10,35 C10,60 50,90 50,90 Z"
+                                    fill="#FF4D6D" stroke="#FFE6EC" stroke-width="3" />
+                                <circle cx="50" cy="42" r="6" fill="#2D2D2D" />
+                                <polygon points="47,42 53,42 55,56 45,56" fill="#2D2D2D" />
+                            </svg>
+                        </div>
+                        <div class="drop-target-indicator"></div>
+                    </div>
+                </div>
+
+                <!-- Romantic Dialogue Box -->
+                <div class="dialogue-box hidden" id="growing-dialogue-box">
+                    <p class="dialogue-text" id="growing-dialogue-text"></p>
+                </div>
+
+                <!-- Draggable key container (hidden initially, drops below dialogue box) -->
+                <div class="draggable-key-container hidden" id="draggable-key" draggable="true">
+                    <div class="key-drag-svg-wrap">
+                        <svg viewBox="0 0 100 100" class="key-svg">
+                            <circle cx="30" cy="50" r="18" fill="none" stroke="#FFD700" stroke-width="6" />
+                            <path
+                                d="M30,42 C27,39 23,39 21,42 C19,45 20,50 30,58 C40,50 41,45 39,42 C37,39 33,39 30,42 Z"
+                                fill="#FFD700" />
+                            <rect x="48" y="47" width="32" height="6" fill="#FFD700" />
+                            <rect x="70" y="53" width="5" height="10" fill="#FFD700" />
+                            <rect x="77" y="53" width="5" height="10" fill="#FFD700" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SCENE 7: FINAL LETTER ================= -->
+        <section id="scene-7" class="scene">
+            <div class="scene-content final-letter-content">
+                <div class="final-letter-card">
+                    <div class="letter-border-frame"></div>
+                    <div class="final-letter-scrollable">
+                        <div class="final-letter-text" id="final-letter-typewriter"></div>
+                    </div>
+                </div>
+
+                <div class="replay-container hidden" id="replay-btn-wrapper">
+                    <button class="btn btn-primary" id="btn-replay">Replay From Beginning 🌸</button>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Script Entry -->
+    <script src="app.js"></script>
+</body>
+
+</html>
