@@ -5,6 +5,20 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
+    // Preload interactive PNG assets in JS
+    const imagesToPreload = [
+        "assets/female_idle.png",
+        "assets/male_idle.png",
+        "assets/female_punch.png",
+        "assets/male_knocked.png",
+        "assets/male_kneeling.png",
+        "assets/female_blush.png"
+    ];
+    imagesToPreload.forEach(src => {
+        const img = new Image();
+        img.src = src;
+    });
+
     // ==========================================
     // AUDIO SYNTHESIZER (NATIVE WEB AUDIO API)
     // ==========================================
@@ -677,9 +691,8 @@ document.addEventListener("DOMContentLoaded", () => {
         isKeyUnlocked = false;
         dragKey.classList.add("hidden");
         dragKey.classList.remove("animate-slide-up");
-        dragKey.style.position = "relative";
-        dragKey.style.left = "0px";
-        dragKey.style.top = "0px";
+        dragKey.style.transform = "none";
+        dragKey.style.transition = "none";
         dragKey.style.opacity = "1";
 
         // Hide lock target
@@ -762,11 +775,9 @@ document.addEventListener("DOMContentLoaded", () => {
         synth.playPop(160, 0.1);
     });
 
-    // Absolute screen-touch coordinates binding for mobile drag
+    // Absolute screen-touch coordinates binding for mobile drag using CSS transforms
     let touchStartX = 0;
     let touchStartY = 0;
-    let keyStartX = 0;
-    let keyStartY = 0;
 
     dragKey.addEventListener("touchstart", (e) => {
         if (isKeyUnlocked) return;
@@ -774,9 +785,8 @@ document.addEventListener("DOMContentLoaded", () => {
         touchStartX = touch.clientX;
         touchStartY = touch.clientY;
 
-        // Read starting CSS coordinates
-        keyStartX = parseFloat(dragKey.style.left) || 0;
-        keyStartY = parseFloat(dragKey.style.top) || 0;
+        // Clear key transition to follow touch movement smoothly
+        dragKey.style.transition = "none";
 
         synth.playPop(250, 0.05);
         e.preventDefault();
@@ -788,9 +798,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const diffX = touch.clientX - touchStartX;
         const diffY = touch.clientY - touchStartY;
 
-        dragKey.style.position = "absolute";
-        dragKey.style.left = `${keyStartX + diffX}px`;
-        dragKey.style.top = `${keyStartY + diffY}px`;
+        // Use CSS translate relative to static position to prevent jumping
+        dragKey.style.transform = `translate(${diffX}px, ${diffY}px)`;
 
         // Check if cursor/finger overlaps Lock drop zone
         if (checkOverlap(dragKey, dropLock)) {
@@ -806,14 +815,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (checkOverlap(dragKey, dropLock)) {
             triggerUnlockSequence();
         } else {
-            // Return back to starting position smoothly
-            dragKey.style.transition = "left 0.4s ease, top 0.4s ease";
-            dragKey.style.left = "0px";
-            dragKey.style.top = "0px";
-            setTimeout(() => {
-                dragKey.style.transition = "none";
-                dragKey.style.position = "relative";
-            }, 400);
+            // Return back to starting position smoothly via transform transition
+            dragKey.style.transition = "transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+            dragKey.style.transform = "translate(0px, 0px)";
             synth.playPop(120, 0.08);
         }
     });
@@ -951,6 +955,8 @@ document.addEventListener("DOMContentLoaded", () => {
         dropLock.style.transition = "none";
         dropLock.style.transform = "scale(1) rotate(0deg)";
         dropLock.style.opacity = "1";
+        dragKey.style.transform = "none";
+        dragKey.style.transition = "none";
         dragKey.style.opacity = "1";
 
         // Transition back to Landing (Scene 1)
