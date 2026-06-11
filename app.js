@@ -576,7 +576,7 @@ document.addEventListener("DOMContentLoaded", () => {
         powEffect.classList.add("hidden");
     }
 
-    femaleWrap.addEventListener("click", () => {
+    femaleWrap.addEventListener("pointerdown", (e) => {
         if (scene4State !== 1) return;
         scene4State = 1.5; // lock taps
 
@@ -622,7 +622,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 1400);
     });
 
-    maleWrap.addEventListener("click", () => {
+    maleWrap.addEventListener("pointerdown", (e) => {
         if (scene4State !== 2) return;
         scene4State = 3; // complete state
 
@@ -771,6 +771,8 @@ document.addEventListener("DOMContentLoaded", () => {
             touchStartX = touch.clientX;
             touchStartY = touch.clientY;
 
+            // Remove animation to free transform properties from forwards lock in Chrome/Brave
+            dragKey.classList.remove("animate-slide-up");
             dragKey.style.transition = "none";
             synth.playPop(250, 0.05);
             e.preventDefault();
@@ -819,6 +821,8 @@ document.addEventListener("DOMContentLoaded", () => {
             pointerStartX = e.clientX;
             pointerStartY = e.clientY;
 
+            // Remove animation to free transform properties from forwards lock in Chrome/Brave
+            dragKey.classList.remove("animate-slide-up");
             // Clear key transition to follow touch/mouse movement smoothly
             dragKey.style.transition = "none";
             
