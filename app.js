@@ -326,11 +326,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Scene 5 Tap properties
     let growTaps = 0;
     const maxGrowTaps = 100;
-    const growingDialogues = [
-        { taps: 10, text: "Look at you..." },
-        { taps: 40, text: "Still making my heart bigger..." },
-        { taps: 80, text: "even when your mood is off. ❤️" }
-    ];
+    const growingDialogues = [];
 
     // Scene 7 final letter copy
     const finalLetterCopy =
