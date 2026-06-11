@@ -731,43 +731,27 @@ document.addEventListener("DOMContentLoaded", () => {
         if (growTaps === maxGrowTaps) {
             interactHeart.style.pointerEvents = "none";
             tapInstructionText.innerText = "Amazing. ❤️";
+            dialogueBox.classList.add("hidden");
 
-            // Slow final typewriter dialogue triggers
+            // Morph Heart into Lock!
             setTimeout(() => {
-                dialogueText.innerText = "Look at you...";
-                dialogueBox.classList.remove("hidden");
-                synth.playChime();
-            }, 1200);
+                interactHeart.classList.add("fade-out");
 
-            setTimeout(() => {
-                dialogueText.innerText = "Still making my heart bigger...";
-                synth.playChime();
-            }, 3000);
-
-            setTimeout(() => {
-                dialogueText.innerText = "Just like you've been doing this whole time.";
-                synth.playChime();
-
-                // Morph Heart into Lock!
                 setTimeout(() => {
-                    interactHeart.classList.add("fade-out");
+                    // Spring pop lock target
+                    dropLock.classList.remove("hidden");
 
-                    setTimeout(() => {
-                        // Spring pop lock target
-                        dropLock.classList.remove("hidden");
+                    // Slide in key from below dialogue box!
+                    dragKey.classList.remove("hidden");
+                    dragKey.classList.add("animate-slide-up");
 
-                        // Slide in key from below dialogue box!
-                        dragKey.classList.remove("hidden");
-                        dragKey.classList.add("animate-slide-up");
+                    tapInstructionText.innerText = "Drag the golden key to the heart lock 🗝️";
+                    synth.playChime();
 
-                        tapInstructionText.innerText = "Drag the golden key to the heart lock 🗝️";
-                        synth.playChime();
-
-                        const lockRect = dropLock.getBoundingClientRect();
-                        spawnBurst(lockRect.left + lockRect.width / 2, lockRect.top + lockRect.height / 2, 25, "sparkle");
-                    }, 400);
-                }, 2000);
-            }, 5500);
+                    const lockRect = dropLock.getBoundingClientRect();
+                    spawnBurst(lockRect.left + lockRect.width / 2, lockRect.top + lockRect.height / 2, 25, "sparkle");
+                }, 400);
+            }, 1000);
         }
     });
 
@@ -775,28 +759,31 @@ document.addEventListener("DOMContentLoaded", () => {
         synth.playPop(160, 0.1);
     });
 
-    // Absolute screen-touch coordinates binding for mobile drag using CSS transforms
-    let touchStartX = 0;
-    let touchStartY = 0;
+    // Pointer Events dragging for both desktop and mobile
+    let isDragging = false;
+    let pointerStartX = 0;
+    let pointerStartY = 0;
 
-    dragKey.addEventListener("touchstart", (e) => {
+    dragKey.addEventListener("pointerdown", (e) => {
         if (isKeyUnlocked) return;
-        const touch = e.touches[0];
-        touchStartX = touch.clientX;
-        touchStartY = touch.clientY;
+        isDragging = true;
+        pointerStartX = e.clientX;
+        pointerStartY = e.clientY;
 
-        // Clear key transition to follow touch movement smoothly
+        // Clear key transition to follow touch/mouse movement smoothly
         dragKey.style.transition = "none";
+        
+        // Capture pointer so moves outside key bounds are tracked
+        dragKey.setPointerCapture(e.pointerId);
 
         synth.playPop(250, 0.05);
         e.preventDefault();
-    }, { passive: false });
+    });
 
-    dragKey.addEventListener("touchmove", (e) => {
-        if (isKeyUnlocked) return;
-        const touch = e.touches[0];
-        const diffX = touch.clientX - touchStartX;
-        const diffY = touch.clientY - touchStartY;
+    dragKey.addEventListener("pointermove", (e) => {
+        if (!isDragging || isKeyUnlocked) return;
+        const diffX = e.clientX - pointerStartX;
+        const diffY = e.clientY - pointerStartY;
 
         // Use CSS translate relative to static position to prevent jumping
         dragKey.style.transform = `translate(${diffX}px, ${diffY}px)`;
@@ -808,10 +795,13 @@ document.addEventListener("DOMContentLoaded", () => {
             dropLock.classList.remove("drag-hover");
         }
         e.preventDefault();
-    }, { passive: false });
+    });
 
-    dragKey.addEventListener("touchend", () => {
-        if (isKeyUnlocked) return;
+    dragKey.addEventListener("pointerup", (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        dragKey.releasePointerCapture(e.pointerId);
+
         if (checkOverlap(dragKey, dropLock)) {
             triggerUnlockSequence();
         } else {
@@ -822,27 +812,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Desktop Mouse Drag & Drop API HTML5 integration
-    dragKey.addEventListener("dragstart", (e) => {
-        if (isKeyUnlocked) return;
-        e.dataTransfer.setData("text/plain", "key");
-        synth.playPop(250, 0.05);
-    });
-
-    dropLock.addEventListener("dragover", (e) => {
-        if (isKeyUnlocked) return;
-        e.preventDefault();
-        dropLock.classList.add("drag-hover");
-    });
-
-    dropLock.addEventListener("dragleave", () => {
-        dropLock.classList.remove("drag-hover");
-    });
-
-    dropLock.addEventListener("drop", (e) => {
-        e.preventDefault();
-        dropLock.classList.remove("drag-hover");
-        triggerUnlockSequence();
+    dragKey.addEventListener("pointercancel", (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        dragKey.releasePointerCapture(e.pointerId);
+        dragKey.style.transition = "transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+        dragKey.style.transform = "translate(0px, 0px)";
     });
 
     function checkOverlap(elem1, elem2) {
