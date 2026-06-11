@@ -755,66 +755,120 @@ document.addEventListener("DOMContentLoaded", () => {
         synth.playPop(160, 0.1);
     });
 
-    // Pointer Events dragging for both desktop and mobile
-    let isDragging = false;
-    let pointerStartX = 0;
-    let pointerStartY = 0;
+    // Detect if device supports touch
+    const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
-    dragKey.addEventListener("pointerdown", (e) => {
-        if (isKeyUnlocked) return;
-        isDragging = true;
-        pointerStartX = e.clientX;
-        pointerStartY = e.clientY;
+    if (isTouchDevice) {
+        // Touch events for mobile dragging (explicitly blocks browser scroll gesture)
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let isTouchDragging = false;
 
-        // Clear key transition to follow touch/mouse movement smoothly
-        dragKey.style.transition = "none";
-        
-        // Capture pointer so moves outside key bounds are tracked
-        dragKey.setPointerCapture(e.pointerId);
+        dragKey.addEventListener("touchstart", (e) => {
+            if (isKeyUnlocked) return;
+            isTouchDragging = true;
+            const touch = e.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
 
-        synth.playPop(250, 0.05);
-        e.preventDefault();
-    });
+            dragKey.style.transition = "none";
+            synth.playPop(250, 0.05);
+            e.preventDefault();
+        }, { passive: false });
 
-    dragKey.addEventListener("pointermove", (e) => {
-        if (!isDragging || isKeyUnlocked) return;
-        const diffX = e.clientX - pointerStartX;
-        const diffY = e.clientY - pointerStartY;
+        dragKey.addEventListener("touchmove", (e) => {
+            if (!isTouchDragging || isKeyUnlocked) return;
+            const touch = e.touches[0];
+            const diffX = touch.clientX - touchStartX;
+            const diffY = touch.clientY - touchStartY;
 
-        // Use CSS translate relative to static position to prevent jumping
-        dragKey.style.transform = `translate(${diffX}px, ${diffY}px)`;
+            // Use CSS translate relative to static position to prevent jumping
+            dragKey.style.transform = `translate(${diffX}px, ${diffY}px)`;
 
-        // Check if cursor/finger overlaps Lock drop zone
-        if (checkOverlap(dragKey, dropLock)) {
-            dropLock.classList.add("drag-hover");
-        } else {
-            dropLock.classList.remove("drag-hover");
-        }
-        e.preventDefault();
-    });
+            if (checkOverlap(dragKey, dropLock)) {
+                dropLock.classList.add("drag-hover");
+            } else {
+                dropLock.classList.remove("drag-hover");
+            }
+            e.preventDefault();
+        }, { passive: false });
 
-    dragKey.addEventListener("pointerup", (e) => {
-        if (!isDragging) return;
-        isDragging = false;
-        dragKey.releasePointerCapture(e.pointerId);
+        dragKey.addEventListener("touchend", (e) => {
+            if (!isTouchDragging) return;
+            isTouchDragging = false;
 
-        if (checkOverlap(dragKey, dropLock)) {
-            triggerUnlockSequence();
-        } else {
-            // Return back to starting position smoothly via transform transition
+            if (checkOverlap(dragKey, dropLock)) {
+                triggerUnlockSequence();
+            } else {
+                // Return back to starting position smoothly via transform transition
+                dragKey.style.transition = "transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+                dragKey.style.transform = "translate(0px, 0px)";
+                synth.playPop(120, 0.08);
+            }
+            e.preventDefault();
+        });
+    } else {
+        // Pointer events for desktop dragging
+        let isDragging = false;
+        let pointerStartX = 0;
+        let pointerStartY = 0;
+
+        dragKey.addEventListener("pointerdown", (e) => {
+            if (isKeyUnlocked) return;
+            isDragging = true;
+            pointerStartX = e.clientX;
+            pointerStartY = e.clientY;
+
+            // Clear key transition to follow touch/mouse movement smoothly
+            dragKey.style.transition = "none";
+            
+            // Capture pointer so moves outside key bounds are tracked
+            dragKey.setPointerCapture(e.pointerId);
+
+            synth.playPop(250, 0.05);
+            e.preventDefault();
+        });
+
+        dragKey.addEventListener("pointermove", (e) => {
+            if (!isDragging || isKeyUnlocked) return;
+            const diffX = e.clientX - pointerStartX;
+            const diffY = e.clientY - pointerStartY;
+
+            // Use CSS translate relative to static position to prevent jumping
+            dragKey.style.transform = `translate(${diffX}px, ${diffY}px)`;
+
+            // Check if cursor/finger overlaps Lock drop zone
+            if (checkOverlap(dragKey, dropLock)) {
+                dropLock.classList.add("drag-hover");
+            } else {
+                dropLock.classList.remove("drag-hover");
+            }
+            e.preventDefault();
+        });
+
+        dragKey.addEventListener("pointerup", (e) => {
+            if (!isDragging) return;
+            isDragging = false;
+            dragKey.releasePointerCapture(e.pointerId);
+
+            if (checkOverlap(dragKey, dropLock)) {
+                triggerUnlockSequence();
+            } else {
+                // Return back to starting position smoothly via transform transition
+                dragKey.style.transition = "transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+                dragKey.style.transform = "translate(0px, 0px)";
+                synth.playPop(120, 0.08);
+            }
+        });
+
+        dragKey.addEventListener("pointercancel", (e) => {
+            if (!isDragging) return;
+            isDragging = false;
+            dragKey.releasePointerCapture(e.pointerId);
             dragKey.style.transition = "transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
             dragKey.style.transform = "translate(0px, 0px)";
-            synth.playPop(120, 0.08);
-        }
-    });
-
-    dragKey.addEventListener("pointercancel", (e) => {
-        if (!isDragging) return;
-        isDragging = false;
-        dragKey.releasePointerCapture(e.pointerId);
-        dragKey.style.transition = "transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
-        dragKey.style.transform = "translate(0px, 0px)";
-    });
+        });
+    }
 
     function checkOverlap(elem1, elem2) {
         const r1 = elem1.getBoundingClientRect();
