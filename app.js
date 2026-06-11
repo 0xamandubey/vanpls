@@ -560,12 +560,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const labelFemale = document.getElementById("label-female");
     const labelMale = document.getElementById("label-male");
 
+    function showFemaleSprite(spriteClass) {
+        femaleWrap.querySelectorAll(".char-sprite").forEach(img => img.classList.add("hidden"));
+        femaleWrap.querySelector(`.female-${spriteClass}-img`).classList.remove("hidden");
+    }
+
+    function showMaleSprite(spriteClass) {
+        maleWrap.querySelectorAll(".char-sprite").forEach(img => img.classList.add("hidden"));
+        maleWrap.querySelector(`.male-${spriteClass}-img`).classList.remove("hidden");
+    }
+
     function initScene4Characters() {
         scene4State = 1;
         femaleWrap.className = "character-wrapper female-character glow-effect";
         maleWrap.className = "character-wrapper male-character";
-        femaleSprite.src = "assets/female_idle.png";
-        maleSprite.src = "assets/male_idle.png";
+        showFemaleSprite("idle");
+        showMaleSprite("idle");
 
         // Setup initial labels
         labelFemale.classList.remove("hidden");
@@ -586,7 +596,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Play punch sequence
         femaleWrap.classList.remove("glow-effect");
         femaleWrap.classList.add("punch-action");
-        femaleSprite.src = "assets/female_punch.png";
+        showFemaleSprite("punch");
 
         // Sound retro comic punch
         synth.playPunch();
@@ -594,7 +604,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Male knocked back
         setTimeout(() => {
             maleWrap.classList.add("knocked-action");
-            maleSprite.src = "assets/male_knocked.png";
+            showMaleSprite("knocked");
 
             // Show POW comic popup
             powEffect.classList.remove("hidden");
@@ -606,12 +616,12 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => {
             powEffect.classList.add("hidden");
             femaleWrap.classList.remove("punch-action");
-            femaleSprite.src = "assets/female_idle.png";
+            showFemaleSprite("idle");
         }, 600);
 
         setTimeout(() => {
             maleWrap.classList.remove("knocked-action");
-            maleSprite.src = "assets/male_idle.png";
+            showMaleSprite("idle");
 
             // Transition to State 2: glow male
             scene4State = 2;
@@ -633,11 +643,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Kneeling action
         maleWrap.classList.add("kneeling-action");
-        maleSprite.src = "assets/male_kneeling.png";
+        showMaleSprite("kneeling");
 
         // Blushing action for girl
         femaleWrap.classList.add("blush-action");
-        femaleSprite.src = "assets/female_blush.png";
+        showFemaleSprite("blush");
 
         // Play chime sound
         synth.playChime();
@@ -976,6 +986,8 @@ document.addEventListener("DOMContentLoaded", () => {
         scene4State = 1;
         femaleWrap.classList.remove("blush-action");
         maleWrap.classList.remove("kneeling-action");
+        showFemaleSprite("idle");
+        showMaleSprite("idle");
 
         // Reset Scene 5 taps
         growTaps = 0;

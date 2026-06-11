@@ -722,15 +722,15 @@ body {
     filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.15));
 }
 
-#sprite-male {
+.male-character .char-sprite {
     transform: scaleX(-1);
 }
 
-#sprite-female {
+.female-character .char-sprite {
     transform: scaleX(-1);
 }
 
-.blush-action #sprite-female {
+.blush-action .char-sprite {
     transform: scaleX(1);
 }
 
@@ -750,7 +750,7 @@ body {
     animation: punchQuickLeft 0.4s ease-out forwards;
 }
 
-.punch-action #sprite-female {
+.punch-action .char-sprite {
     transform: scaleX(1); /* Flips punching girl direction to face left (towards the boy) */
 }
 
@@ -763,7 +763,7 @@ body {
     animation: floatProposal 2s infinite alternate ease-in-out;
 }
 
-.kneeling-action #sprite-male {
+.kneeling-action .char-sprite {
     transform: scaleX(1); /* Flips kneeling boy direction to face right (towards the girl) */
 }
 
